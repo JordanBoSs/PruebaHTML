@@ -1,3 +1,6 @@
+/* ==================================== */
+/* === ESTILOS GENERALES Y DE INDEX === */
+/* ==================================== */
 :root {
     --primary-color: #007bff;
     --secondary-color: #6c757d;
@@ -11,12 +14,14 @@ body {
     background-color: var(--background-color);
     margin: 0;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 .main-header {
     text-align: center;
     color: var(--primary-color);
     padding: 20px 0;
+    position: relative; /* Para posicionar el botón Home */
 }
 
 .search-bar {
@@ -85,19 +90,212 @@ body {
     font-size: 0.9em;
 }
 
-/* Diseño para móviles */
+/* ===================================== */
+/* === ESTILOS PARA LA PÁGINA DETALLE === */
+/* ===================================== */
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+    top: 25px;
+}
+
+.home-button {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    transition: background-color 0.2s;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar nav {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-item {
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between; /* Alinea el ícono a la derecha */
+    align-items: center;
+    gap: 10px;
+}
+.menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.submenu {
+    list-style: none;
+    padding: 0;
+    margin-left: 10px;
+    display: none; /* Oculta el submenu por defecto */
+    transition: all 0.3s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.submenu.active {
+    display: block;
+    max-height: 500px; /* Un valor grande para la animación */
+}
+
+.submenu-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.submenu-item:hover, .submenu-item.active {
+    background-color: #e9ecef;
+    border-left: 2px solid var(--primary-color);
+}
+
+.content-area {
+    flex: 1;
+    background-color: var(--background-color);
+    padding: 0;
+    border-radius: 8px;
+}
+
+/* --- Estilos para las tarjetas colapsables --- */
+.collapsible-card {
+    background-color: var(--card-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 20px;
+    background-color: #e9ecef;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+.toggle-icon {
+    transition: transform 0.3s ease-in-out;
+}
+.collapsible-card.active .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 20px;
+}
+
+.collapsible-card.active .collapsible-content {
+    padding: 20px;
+    max-height: 1000px;
+}
+
+.chart-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.chart-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ================================ */
+/* === MEDIA QUERIES RESPONSIVAS === */
+/* ================================ */
 @media (max-width: 768px) {
-    .search-bar {
+    body {
+        padding: 0;
+    }
+
+    .main-header {
+        text-align: left;
+        padding: 15px 10px 15px 60px;
+        position: relative;
+    }
+    
+    .main-header h1 {
+        padding-right: 80px; /* Espacio para el botón Home */
+        font-size: 1.2em;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .hamburger-menu {
+        display: block;
+        left: 10px;
+        top: 15px;
+    }
+
+    .home-button {
+        top: 15px;
+        right: 10px;
+        padding: 5px 10px;
+    }
+    
+    .container {
         flex-direction: column;
-        align-items: center;
     }
-    
-    .search-bar input, .search-bar select {
-        width: 100%;
-        box-sizing: border-box;
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100%;
+        width: 250px;
+        z-index: 1000;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     }
-    
-    .card-grid {
-        grid-template-columns: 1fr;
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .content-area {
+        margin-left: 0;
+        padding-top: 10px;
     }
 }
