@@ -235,7 +235,7 @@ body {
 }
 
 .chart-container img {
-    max-width: 100%;
+    max-width: 30%;
     height: auto;
     display: block;
 }
@@ -299,3 +299,4 @@ body {
         padding-top: 10px;
     }
 }
+
