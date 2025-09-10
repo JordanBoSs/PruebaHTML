@@ -563,9 +563,9 @@ function initIndexPage() {
     }
 }
 
-// ==================================
+// ======================================
 // === LÓGICA DE LA PÁGINA DETALLE ===
-// ==================================
+// ======================================
 function initDetallePage() {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebar = document.getElementById('sidebar');
@@ -599,7 +599,7 @@ function initDetallePage() {
                 <div class="submenu" data-index-id="${index}">
             `;
             indice.opciones.forEach((opcion, opcionIndex) => {
-                 sidebarHtml += `<div class="submenu-item" data-index-id="${index}" data-opcion-id="${opcionIndex}">${opcion.title}</div>`;
+                sidebarHtml += `<div class="submenu-item" data-index-id="${index}" data-opcion-id="${opcionIndex}">${opcion.title}</div>`;
             });
             sidebarHtml += `</div>`;
         });
@@ -610,7 +610,7 @@ function initDetallePage() {
             let contentHtml = '';
             secciones.forEach((seccion, seccionIndex) => {
                 contentHtml += `
-                    <div class="collapsible-card active" id="seccion-${seccionIndex}">
+                    <div class="collapsible-card " id="seccion-${seccionIndex}">
                         <div class="card-header">
                             <h2>${seccion.title}</h2>
                             <i class="fas fa-chevron-right toggle-icon"></i>
@@ -632,30 +632,29 @@ function initDetallePage() {
             });
         };
 
-        // Lógica de interacción del menú principal
+        // --- INICIO DE LOS CAMBIOS ---
+        
+        // Lógica de interacción del menú principal (solo muestra/oculta submenús)
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => {
                 const indexId = item.getAttribute('data-index-id');
-                
-                // Oculta todos los submenús
-                document.querySelectorAll('.submenu').forEach(el => el.classList.remove('active'));
-                
-                // Muestra solo el submenú del item seleccionado
                 const submenu = document.querySelector(`.submenu[data-index-id="${indexId}"]`);
+                
+                // Cierra otros submenús para que solo uno esté abierto a la vez
+                document.querySelectorAll('.submenu').forEach(el => {
+                    if (el !== submenu) {
+                        el.classList.remove('active');
+                    }
+                });
+
+                // Muestra u oculta el submenú del item clickeado
                 if (submenu) {
-                    submenu.classList.add('active');
+                    submenu.classList.toggle('active');
                 }
 
-                // Carga la primera opción de ese índice por defecto
-                const selectedIndice = currentBook.indices[indexId];
-                if (selectedIndice.opciones.length > 0) {
-                     const firstOpcion = selectedIndice.opciones[0];
-                     renderSeccionesContent(firstOpcion.secciones);
-                }
-                
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                }
+                // En la vista móvil, no cerramos la sidebar aquí,
+                // para que el usuario pueda ver las opciones del submenú.
+                // La sidebar se cerrará al seleccionar una opción.
             });
         });
         
@@ -670,22 +669,25 @@ function initDetallePage() {
                 document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
                 item.classList.add('active');
 
+                // Renderiza el contenido al hacer clic en un submenú
                 renderSeccionesContent(selectedOpcion.secciones);
                 
+                // Cierra la sidebar en vista móvil después de seleccionar una opción
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('active');
                 }
             });
         });
+        
+        // --- FIN DE LOS CAMBIOS ---
 
-        // Carga el contenido del primer índice y su primera opción por defecto
+        // Carga el contenido del primer índice y su primera opción por defecto,
+        // pero solo si existen.
         if (currentBook.indices.length > 0) {
-             const firstMenuItem = document.querySelector('.menu-item');
-             firstMenuItem.click();
-             const firstSubMenuItem = firstMenuItem.nextElementSibling.querySelector('.submenu-item');
-             if (firstSubMenuItem) {
-                 firstSubMenuItem.click();
-             }
+            const firstSubMenuItem = document.querySelector('.submenu-item');
+            if (firstSubMenuItem) {
+                firstSubMenuItem.click();
+            }
         }
 
     } else {
